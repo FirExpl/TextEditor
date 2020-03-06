@@ -15,9 +15,9 @@ class TextEditorTests: XCTestCase {
   var textView: UITextView!
 
   override func setUp() {
-      // Put setup code here. This method is called before the invocation of each test method in the class.
-    textViewManager = TextViewManager()
     textView = UITextView()
+    textViewManager = TextViewManager(withTextView: textView)
+
   }
 
   override func tearDown() {
@@ -30,19 +30,19 @@ class TextEditorTests: XCTestCase {
     let positionStart = textView.position(from: textView.beginningOfDocument, offset: 6)!
     let positionEnd = textView.position(from: textView.beginningOfDocument, offset: 11)!
     textView.selectedTextRange = textView.textRange(from: positionStart, to: positionEnd)
-    textViewManager.insertTabCharacter(toTextView: textView)
+    textViewManager.insertTabCharacter()
     XCTAssert(textView.text == "lorem \(textViewManager.tabCharacter) delle \namore")
 
     textView.text = testText
     textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument,
                                                     to: textView.beginningOfDocument)
-    textViewManager.insertTabCharacter(toTextView: textView)
+    textViewManager.insertTabCharacter()
     XCTAssert(textView.text == "\(textViewManager.tabCharacter)lorem ipsum delle \namore")
 
     textView.text = testText
     textView.selectedTextRange = textView.textRange(from: textView.endOfDocument,
                                                     to: textView.endOfDocument)
-    textViewManager.insertTabCharacter(toTextView: textView)
+    textViewManager.insertTabCharacter()
     XCTAssert(textView.text == "lorem ipsum delle \namore\(textViewManager.tabCharacter)")
   }
 
@@ -52,25 +52,25 @@ class TextEditorTests: XCTestCase {
     let positionStart = textView.position(from: textView.beginningOfDocument, offset: 6)!
     let positionEnd = textView.position(from: textView.beginningOfDocument, offset: 11)!
     textView.selectedTextRange = textView.textRange(from: positionStart, to: positionEnd)
-    textViewManager.insertBulletPoint(toTextView: textView)
+    textViewManager.insertBulletPoint()
     XCTAssert(textView.text == "\(textViewManager.bulletPointCharacter)lorem ipsum delle \namore")
 
     // second press of bullet button should undo previous action
     textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument,
                                                     to: textView.beginningOfDocument)
-    textViewManager.insertBulletPoint(toTextView: textView)
+    textViewManager.insertBulletPoint()
     XCTAssert(textView.text == testText)
 
     // check that behavior still the same even for second line
     let slPositionStart = textView.position(from: textView.beginningOfDocument, offset: 20)!
     let slPositionEnd = textView.position(from: textView.beginningOfDocument, offset: 24)!
     textView.selectedTextRange = textView.textRange(from: slPositionStart, to: slPositionEnd)
-    textViewManager.insertBulletPoint(toTextView: textView)
+    textViewManager.insertBulletPoint()
     XCTAssert(textView.text == "lorem ipsum delle \n\(textViewManager.bulletPointCharacter)amore")
 
     textView.selectedTextRange = textView.textRange(from: textView.endOfDocument,
                                                     to: textView.endOfDocument)
-    textViewManager.insertBulletPoint(toTextView: textView)
+    textViewManager.insertBulletPoint()
     XCTAssert(textView.text == testText)
   }
 
