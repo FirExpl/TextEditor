@@ -1,24 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Text Edit Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="TextEditController" customModule="TextEditor" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Sample text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="S3a-3M-FOc">
+                                <rect key="frame" x="8" y="44" width="414" height="818"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="frt-2a-t8p" customClass="Toolbar" customModule="TextEditor" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="808" width="414" height="54"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="54" id="D1i-zA-JET"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="euT-HM-bfX">
+                                <rect key="frame" x="0.0" y="862" width="414" height="34"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="IF6-C4-HMg"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="S3a-3M-FOc" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="3zj-J4-0oT"/>
+                            <constraint firstItem="S3a-3M-FOc" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" constant="8" id="TiS-2d-zHN"/>
+                            <constraint firstItem="euT-HM-bfX" firstAttribute="top" secondItem="frt-2a-t8p" secondAttribute="bottom" id="WXp-GH-c33"/>
+                            <constraint firstItem="euT-HM-bfX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="hi6-4f-SC5"/>
+                            <constraint firstItem="frt-2a-t8p" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="lEJ-si-Zlz"/>
+                            <constraint firstItem="frt-2a-t8p" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="lsE-U3-khD"/>
+                            <constraint firstItem="S3a-3M-FOc" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="lzv-WC-8Ou"/>
+                            <constraint firstItem="frt-2a-t8p" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="nqO-8q-L7Y"/>
+                            <constraint firstItem="S3a-3M-FOc" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="oME-I7-mAo"/>
+                            <constraint firstAttribute="trailing" secondItem="euT-HM-bfX" secondAttribute="trailing" id="tvb-p3-f1W"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <connections>
+                        <outlet property="textView" destination="S3a-3M-FOc" id="bO4-TL-O4Q"/>
+                        <outlet property="toolbar" destination="frt-2a-t8p" id="0Ff-7c-3qP"/>
+                        <outlet property="toolbarBottom" destination="lEJ-si-Zlz" id="jtD-5Z-mzB"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="137.68115942028987" y="126.5625"/>
         </scene>
     </scenes>
 </document>
