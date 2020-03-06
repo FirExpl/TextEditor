@@ -57,7 +57,11 @@ class TextEditorTests: XCTestCase {
       "   text with space only indentation",
       "\t\t\ttext with tabs\t only indentation",
       " \t\t \t text with mixed indentation",
-      ""
+      "",
+      "text with newline\n  and indentation",
+      "\n\tindentation should work",
+      "in any case \n",
+      "\n",
     ]
 
     let results = [
@@ -67,13 +71,18 @@ class TextEditorTests: XCTestCase {
       "\t\t\t",
       " \t\t \t ",
       nil,
+      "  ",
+      "\t",
+      nil,
+      nil,
     ]
 
     XCTAssert(testStrings.count == results.count)
 
     for (index, test) in testStrings.enumerated() {
       let result = results[index]
-      let indentation = test.indentation()
+      let startIndex = test.lineStartIndex(beforeIndex: test.endIndex)
+      let indentation = test.indentation(from:startIndex)
       let success = indentation == result
       if !success {
         print("indentation fail: expected \(String(describing: result)) | actual \(String(describing: indentation))")
@@ -87,7 +96,11 @@ class TextEditorTests: XCTestCase {
       "\t*•s'owefm djfljwo fw",
       "• \t\t\t",
       "•",
-      ""
+      "",
+      "text with newline\n  •and indentation",
+      "\n\t•indentation should work",
+      "in any case \n•",
+      "•\n",
     ]
 
     let prefixResults = [
@@ -96,14 +109,19 @@ class TextEditorTests: XCTestCase {
       "\t",
       "•",
       "•",
-      nil
+      nil,
+      "  •",
+      "\t•",
+      "•",
+      nil,
     ]
 
     XCTAssert(testPrefixStrings.count == prefixResults.count)
 
     for (index, test) in testPrefixStrings.enumerated() {
       let result = prefixResults[index]
-      let indentation = test.indentation(withPrefix: "•")
+      let startIndex = test.lineStartIndex(beforeIndex: test.endIndex)
+      let indentation = test.indentation(from: startIndex, withPrefix: "•")
       let success = indentation == result
       if !success {
         print("indentation prefix fail: expected \(String(describing: result)) | actual \(String(describing: indentation))")

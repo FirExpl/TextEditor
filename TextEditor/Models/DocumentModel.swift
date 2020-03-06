@@ -22,7 +22,9 @@ class DocumentModel : NSObject, UITextViewDelegate {
     if let selectedRange = textView.selectedTextRange {
       let location = textView.offset(from: textView.beginningOfDocument, to: selectedRange.start)
       let lineStart = textView.text.lineStartIndex(beforeLocation: location)
-      let indentation = textView.text.indentation(withPrefix: bulletPointCharacter)
+      let indentation = textView.text.indentation(from: lineStart,
+                                                  withPrefix: bulletPointCharacter)
+//      if indentation
 
     }
   }
@@ -31,13 +33,13 @@ class DocumentModel : NSObject, UITextViewDelegate {
   func textView(_ textView: UITextView,
                 shouldChangeTextIn range: NSRange,
                 replacementText text: String) -> Bool {
-    let fullText = textView.text ?? ""
     if text.isNewLine,
-       let currentLine = fullText.line(beforeLocation: range.location),
-       let indentation = currentLine.indentation() {
-      
-      let nsFullText = fullText as NSString
-      textView.text = nsFullText.replacingCharacters(in: range, with: "\n" + indentation)
+       let currentLineStart = textView.text?.lineStartIndex(beforeLocation: range.location),
+      let indentation = textView.text.indentation(from: currentLineStart,
+                                                  withPrefix: bulletPointCharacter) {
+      let nsFullText = textView.text as NSString
+      textView.text = nsFullText.replacingCharacters(in: range,
+                                                     with: "\n" + indentation)
       return false
     }
     return true
@@ -87,9 +89,11 @@ internal extension String {
     return String(self[lineStartIndex..<locationIndex])
   }
 
-  func indentation(withPrefix prefix: String? = nil) -> String? {
-    let range = self.rangeOfCharacter(from: CharacterSet.whitespaces.inverted)
-                                                    ?? (startIndex..<startIndex)
+  func indentation(from startIndex: String.Index,
+                   withPrefix prefix: String? = nil) -> String? {
+    let range = self.rangeOfCharacter(from: CharacterSet.whitespaces.inverted,
+                                      range:(startIndex..<self.endIndex))
+                ?? (startIndex..<startIndex)
 
     var rightBound = range.lowerBound
     if let prefix = prefix,
@@ -100,6 +104,6 @@ internal extension String {
       }
      }
     
-    return rightBound > startIndex ? String(self[..<rightBound]) : nil
+    return rightBound > startIndex ? String(self[startIndex..<rightBound]) : nil
   }
 }
