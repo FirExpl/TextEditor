@@ -55,11 +55,13 @@ class TextEditorTests: XCTestCase {
     textViewManager.insertBulletPoint(toTextView: textView)
     XCTAssert(textView.text == "\(textViewManager.bulletPointCharacter)lorem ipsum delle \namore")
 
+    // second press of bullet button should undo previous action
     textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument,
                                                     to: textView.beginningOfDocument)
     textViewManager.insertBulletPoint(toTextView: textView)
     XCTAssert(textView.text == testText)
 
+    // check that behavior still the same even for second line
     let slPositionStart = textView.position(from: textView.beginningOfDocument, offset: 20)!
     let slPositionEnd = textView.position(from: textView.beginningOfDocument, offset: 24)!
     textView.selectedTextRange = textView.textRange(from: slPositionStart, to: slPositionEnd)
@@ -70,6 +72,21 @@ class TextEditorTests: XCTestCase {
                                                     to: textView.endOfDocument)
     textViewManager.insertBulletPoint(toTextView: textView)
     XCTAssert(textView.text == testText)
+  }
+
+  func testUITextViewDelegateMethods() {
+    let testText = " \t lorem ipsum delle \namore"
+    textView.text = testText
+    // simulate the return button pressing by passing new line character as replacement text
+    var shouldCnahge = textViewManager.textView(textView, shouldChangeTextIn: NSRange(location: 9, length: 5), replacementText: "\n")
+    XCTAssert(!shouldCnahge)
+    XCTAssert(textView.text == " \t lorem \n \t  delle \namore")
+
+    let textBefore = textView.text!
+    shouldCnahge = textViewManager.textView(textView, shouldChangeTextIn: NSRange(location: 9, length: 4), replacementText: "ipsum")
+    XCTAssert(shouldCnahge)
+    // textManager shouldn't change the text in case it returns true
+    XCTAssert(textView.text == textBefore)
   }
 
   func testStringIndentation() {

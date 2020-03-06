@@ -11,14 +11,23 @@ import UIKit
 class TextViewManager : NSObject, UITextViewDelegate {
   var tabCharacter : String = "\t"
   var bulletPointCharacter: String = "•"
+  let textView : UITextView
 
-  func insertTabCharacter(toTextView textView: UITextView) {
+  public init(withTextView textView: UITextView) {
+    self.textView = textView
+
+    super.init()
+
+    self.textView.delegate = self
+  }
+
+  func insertTabCharacter() {
     if let selectedRange = textView.selectedTextRange {
       textView.replace(selectedRange, withText: tabCharacter)
     }
   }
 
-  func insertBulletPoint(toTextView textView: UITextView) {
+  func insertBulletPoint() {
     if let selectedRange = textView.selectedTextRange {
       let location = textView.offset(from: textView.beginningOfDocument, to: selectedRange.start)
       let lineStart = textView.text.lineStartIndex(beforeLocation: location)
@@ -26,16 +35,19 @@ class TextViewManager : NSObject, UITextViewDelegate {
                                                   withPrefix: bulletPointCharacter) ?? ""
       if let bulletRange = textView.text.range(of: bulletPointCharacter,
                                                range:lineStart..<textView.text.endIndex) {
+        // indentation with bullet point => remove bullet point
         let indentationRange = textView.text.range(of: indentation,
                                                    range: lineStart..<textView.text.endIndex)!
         textView.text.replaceSubrange(indentationRange,
                                       with: textView.text[indentationRange.lowerBound..<bulletRange.lowerBound])
       } else if indentation.count > 0 {
+        // indentation without bullet point => add bullet point after indentation
         let indentationRange = textView.text.range(of: indentation,
                                                    range: lineStart..<textView.text.endIndex)!
         textView.text.replaceSubrange(indentationRange,
                                       with: indentation + bulletPointCharacter)
       } else {
+        // no identation no bullet point => add bullet point to beginning of the line
         textView.text.replaceSubrange(lineStart..<lineStart, with: bulletPointCharacter)
       }
     }
