@@ -13,7 +13,7 @@ class TextEditController: UIViewController, UITextViewDelegate {
   @IBOutlet var toolbar: Toolbar!
   @IBOutlet var toolbarBottom: NSLayoutConstraint!
   var keyboardController: KeyboardController!
-  var documentModel: DocumentModel!
+  var textViewManager: TextViewManager!
 
   // MARK: - UIViewController
 
@@ -22,7 +22,7 @@ class TextEditController: UIViewController, UITextViewDelegate {
 
     self.setupToolbar()
     self.setupKeyboardController()
-    self.setupDocumentModel()
+    self.setuptextViewManager()
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -69,19 +69,19 @@ class TextEditController: UIViewController, UITextViewDelegate {
     })
   }
 
-  func setupDocumentModel() {
-    self.documentModel = DocumentModel()
-    self.textView.delegate = self.documentModel
+  func setuptextViewManager() {
+    self.textViewManager = TextViewManager()
+    self.textView.delegate = self.textViewManager
   }
 
   // MARK: - actions
 
   func onTabAction() {
-    self.documentModel.insertTabCharacter(toTextView: self.textView)
+    self.textViewManager.insertTabCharacter(toTextView: self.textView)
   }
 
   func onBulletPointsAction() {
-
+    self.textViewManager.insertBulletPoint(toTextView: self.textView)
   }
 
   func onKeyboardButton() {

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		EFBC2ECD240EC39400A670D5 /* DocumentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFBC2ECC240EC39400A670D5 /* DocumentModel.swift */; };
+		EFBC2ECD240EC39400A670D5 /* TextViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFBC2ECC240EC39400A670D5 /* TextViewManager.swift */; };
 		EFED4AFA240D62BE0099735B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFED4AF9240D62BE0099735B /* AppDelegate.swift */; };
 		EFED4AFE240D62BE0099735B /* TextEditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFED4AFD240D62BE0099735B /* TextEditController.swift */; };
 		EFED4B01240D62BE0099735B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EFED4AFF240D62BE0099735B /* Main.storyboard */; };
@@ -29,7 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		EFBC2ECC240EC39400A670D5 /* DocumentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentModel.swift; sourceTree = "<group>"; };
+		EFBC2ECC240EC39400A670D5 /* TextViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewManager.swift; sourceTree = "<group>"; };
 		EFED4AF6240D62BE0099735B /* TextEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFED4AF9240D62BE0099735B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EFED4AFD240D62BE0099735B /* TextEditController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditController.swift; sourceTree = "<group>"; };
@@ -62,14 +62,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		EFBC2ECB240EC38100A670D5 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				EFBC2ECC240EC39400A670D5 /* DocumentModel.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
 		EFED4AED240D62BE0099735B = {
 			isa = PBXGroup;
 			children = (
@@ -95,7 +87,7 @@
 				EFED4AFD240D62BE0099735B /* TextEditController.swift */,
 				EFED4B1B240D641A0099735B /* KeyboardController.swift */,
 				EFED4B1D240D642B0099735B /* Toolbar.swift */,
-				EFBC2ECB240EC38100A670D5 /* Models */,
+				EFBC2ECC240EC39400A670D5 /* TextViewManager.swift */,
 				EFED4AFF240D62BE0099735B /* Main.storyboard */,
 				EFED4B02240D62C10099735B /* Assets.xcassets */,
 				EFED4B04240D62C20099735B /* LaunchScreen.storyboard */,
@@ -216,7 +208,7 @@
 			files = (
 				EFED4B1C240D641A0099735B /* KeyboardController.swift in Sources */,
 				EFED4AFE240D62BE0099735B /* TextEditController.swift in Sources */,
-				EFBC2ECD240EC39400A670D5 /* DocumentModel.swift in Sources */,
+				EFBC2ECD240EC39400A670D5 /* TextViewManager.swift in Sources */,
 				EFED4AFA240D62BE0099735B /* AppDelegate.swift in Sources */,
 				EFED4B1E240D642B0099735B /* Toolbar.swift in Sources */,
 			);

@@ -11,43 +11,65 @@ import XCTest
 
 class TextEditorTests: XCTestCase {
 
+  var textViewManager : TextViewManager!
+  var textView: UITextView!
+
   override func setUp() {
       // Put setup code here. This method is called before the invocation of each test method in the class.
+    textViewManager = TextViewManager()
+    textView = UITextView()
   }
 
   override func tearDown() {
       // Put teardown code here. This method is called after the invocation of each test method in the class.
   }
 
-  func testStringLine() {
-      // This is an example of a functional test case.
-      // Use XCTAssert and related functions to verify your tests produce the correct results.
-    let testString = "lorem ipsum\ndo something\n\n\nand nothing"
-    let nsTestString = testString as NSString
+  func testTabFunction() {
+    let testText = "lorem ipsum delle \namore"
+    textView.text = testText
+    let positionStart = textView.position(from: textView.beginningOfDocument, offset: 6)!
+    let positionEnd = textView.position(from: textView.beginningOfDocument, offset: 11)!
+    textView.selectedTextRange = textView.textRange(from: positionStart, to: positionEnd)
+    textViewManager.insertTabCharacter(toTextView: textView)
+    XCTAssert(textView.text == "lorem \(textViewManager.tabCharacter) delle \namore")
 
-    XCTAssert(testString.line(beforeLocation: 0) == nil)
+    textView.text = testText
+    textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument,
+                                                    to: textView.beginningOfDocument)
+    textViewManager.insertTabCharacter(toTextView: textView)
+    XCTAssert(textView.text == "\(textViewManager.tabCharacter)lorem ipsum delle \namore")
 
-    let commonCaseRange = nsTestString.range(of: "mething")
-    let commonLine = testString.line(beforeLocation: commonCaseRange.location)
-    XCTAssert(commonLine != nil)
-    XCTAssert(commonLine! == "do so")
+    textView.text = testText
+    textView.selectedTextRange = textView.textRange(from: textView.endOfDocument,
+                                                    to: textView.endOfDocument)
+    textViewManager.insertTabCharacter(toTextView: textView)
+    XCTAssert(textView.text == "lorem ipsum delle \namore\(textViewManager.tabCharacter)")
+  }
 
+  func testBulletpointFunction() {
+    let testText = "lorem ipsum delle \namore"
+    textView.text = testText
+    let positionStart = textView.position(from: textView.beginningOfDocument, offset: 6)!
+    let positionEnd = textView.position(from: textView.beginningOfDocument, offset: 11)!
+    textView.selectedTextRange = textView.textRange(from: positionStart, to: positionEnd)
+    textViewManager.insertBulletPoint(toTextView: textView)
+    XCTAssert(textView.text == "\(textViewManager.bulletPointCharacter)lorem ipsum delle \namore")
 
-    let emptyLineRange = nsTestString.range(of: "and ")
-    let emptyLine = testString.line(beforeLocation: emptyLineRange.location)
-    XCTAssert(emptyLine != nil)
-    XCTAssert(emptyLine! == "")
+    textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument,
+                                                    to: textView.beginningOfDocument)
+    textViewManager.insertBulletPoint(toTextView: textView)
+    XCTAssert(textView.text == testText)
 
-    let doubleEmptyLineRange = nsTestString.range(of: "\nand")
-    let doubleEmptyLine = testString.line(beforeLocation: doubleEmptyLineRange.location)
-    XCTAssert(doubleEmptyLine != nil)
-    XCTAssert(doubleEmptyLine! == "")
+    let slPositionStart = textView.position(from: textView.beginningOfDocument, offset: 20)!
+    let slPositionEnd = textView.position(from: textView.beginningOfDocument, offset: 24)!
+    textView.selectedTextRange = textView.textRange(from: slPositionStart, to: slPositionEnd)
+    textViewManager.insertBulletPoint(toTextView: textView)
+    XCTAssert(textView.text == "lorem ipsum delle \n\(textViewManager.bulletPointCharacter)amore")
 
-    let firstLineRange = nsTestString.range(of: "ipsum")
-    let firstLine = testString.line(beforeLocation: firstLineRange.location)
-    XCTAssert(firstLine != nil)
-    XCTAssert(firstLine! == "lorem ")
-
+    textView.selectedTextRange = textView.textRange(from: textView.endOfDocument,
+                                                    to: textView.endOfDocument)
+    textViewManager.insertBulletPoint(toTextView: textView)
+    XCTAssert(textView.text == testText)
   }
 
   func testStringIndentation() {
@@ -83,13 +105,12 @@ class TextEditorTests: XCTestCase {
       let result = results[index]
       let startIndex = test.lineStartIndex(beforeIndex: test.endIndex)
       let indentation = test.indentation(from:startIndex)
-      let success = indentation == result
-      if !success {
-        print("indentation fail: expected \(String(describing: result)) | actual \(String(describing: indentation))")
-      }
-      XCTAssert(success)
+      XCTAssert(indentation == result,
+                "indentation fail: expected \(String(describing: result)) | actual \(String(describing: indentation))")
     }
+  }
 
+  func testStringIndentationWithPrefix() {
     let testPrefixStrings = [
       "•jdsf sdlfj asdfl ",
       "   •dsfkj dsfjl dfjal",
@@ -122,11 +143,8 @@ class TextEditorTests: XCTestCase {
       let result = prefixResults[index]
       let startIndex = test.lineStartIndex(beforeIndex: test.endIndex)
       let indentation = test.indentation(from: startIndex, withPrefix: "•")
-      let success = indentation == result
-      if !success {
-        print("indentation prefix fail: expected \(String(describing: result)) | actual \(String(describing: indentation))")
-      }
-      XCTAssert(success)
+      XCTAssert(indentation == result,
+                "indentation prefix fail: expected \(String(describing: result)) | actual \(String(describing: indentation))")
     }
   }
 }

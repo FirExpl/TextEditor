@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DocumentModel : NSObject, UITextViewDelegate {
+class TextViewManager : NSObject, UITextViewDelegate {
   var tabCharacter : String = "\t"
   var bulletPointCharacter: String = "•"
 
@@ -23,9 +23,21 @@ class DocumentModel : NSObject, UITextViewDelegate {
       let location = textView.offset(from: textView.beginningOfDocument, to: selectedRange.start)
       let lineStart = textView.text.lineStartIndex(beforeLocation: location)
       let indentation = textView.text.indentation(from: lineStart,
-                                                  withPrefix: bulletPointCharacter)
-//      if indentation
-
+                                                  withPrefix: bulletPointCharacter) ?? ""
+      if let bulletRange = textView.text.range(of: bulletPointCharacter,
+                                               range:lineStart..<textView.text.endIndex) {
+        let indentationRange = textView.text.range(of: indentation,
+                                                   range: lineStart..<textView.text.endIndex)!
+        textView.text.replaceSubrange(indentationRange,
+                                      with: textView.text[indentationRange.lowerBound..<bulletRange.lowerBound])
+      } else if indentation.count > 0 {
+        let indentationRange = textView.text.range(of: indentation,
+                                                   range: lineStart..<textView.text.endIndex)!
+        textView.text.replaceSubrange(indentationRange,
+                                      with: indentation + bulletPointCharacter)
+      } else {
+        textView.text.replaceSubrange(lineStart..<lineStart, with: bulletPointCharacter)
+      }
     }
   }
 
@@ -43,14 +55,6 @@ class DocumentModel : NSObject, UITextViewDelegate {
       return false
     }
     return true
-  }
-
-  func textViewDidChange(_ textView: UITextView) {
-
-  }
-
-  func textViewDidChangeSelection(_ textView: UITextView) {
-
   }
 }
 
@@ -77,16 +81,6 @@ internal extension String {
     }
 
     return self.startIndex
-  }
-
-  func line(beforeLocation location: Int) -> String? {
-    guard location != 0 else {
-      return nil
-    }
-
-    let locationIndex = self.index(forLocation: location)
-    let lineStartIndex = self.lineStartIndex(beforeIndex: locationIndex)
-    return String(self[lineStartIndex..<locationIndex])
   }
 
   func indentation(from startIndex: String.Index,
