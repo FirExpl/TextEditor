@@ -14,6 +14,7 @@ class TextEditController: UIViewController, UITextViewDelegate {
   @IBOutlet var toolbarBottom: NSLayoutConstraint!
   var keyboardController: KeyboardController!
   var textViewManager: TextViewManager!
+  var animator : UIViewPropertyAnimator? = nil
 
   // MARK: - UIViewController
 
@@ -52,20 +53,10 @@ class TextEditController: UIViewController, UITextViewDelegate {
   }
 
   func setupKeyboardController() {
-    self.keyboardController = KeyboardController(handler: { (frame, duration, curve) in
-      let height = self.view.frame.size.height
-      let diff = frame.minY - height
-      let constant = diff != 0 ? self.view.safeAreaInsets.bottom + diff : diff
-      self.toolbarBottom.constant = constant
-      self.view.layer.removeAllAnimations()
-      UIView.animate(withDuration: duration,
-                     delay: 0.0,
-                     options: curve.union(UIView.AnimationOptions.beginFromCurrentState),
-                     animations: {
-                      self.view.layoutIfNeeded()
-                     },
-                     completion: nil)
-
+    self.keyboardController = KeyboardController(handler: { [weak self](frame, duration, curve) in
+      self?.animateToolbar(toFrame: frame,
+                           duration: duration,
+                           curve: UIView.AnimationCurve.curve(withOption:curve))
     })
   }
 
@@ -91,4 +82,36 @@ class TextEditController: UIViewController, UITextViewDelegate {
     }
   }
 
+  // MARK: animate toolbar
+  func animateToolbar(toFrame frame: CGRect, duration: TimeInterval, curve: UIView.AnimationCurve) {
+    print("frame: \(frame); duration: \(duration)")
+    let height = self.view.frame.size.height
+    let diff = frame.minY - height
+    let constant = diff != 0 ? self.view.safeAreaInsets.bottom + diff : diff
+    self.toolbarBottom.constant = constant
+    if duration > 0 {
+      self.animator?.stopAnimation(true)
+      self.animator = UIViewPropertyAnimator(duration: duration, curve: curve) {
+        self.view.layoutIfNeeded()
+      }
+      self.animator?.startAnimation()
+    } else {
+      self.view.layoutIfNeeded()
+    }
+  }
+}
+
+extension UIView.AnimationCurve {
+  static func curve(withOption option: UIView.AnimationOptions) -> UIView.AnimationCurve {
+    switch option {
+    case .curveEaseIn:
+      return .easeIn
+    case .curveEaseOut:
+      return .easeOut
+    case .curveEaseInOut:
+      return .easeInOut
+    default:
+      return .linear
+    }
+  }
 }

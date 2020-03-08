@@ -32,6 +32,8 @@ class ToolbarButton : UIButton {
 }
 
 class Toolbar : UIView {
+  let screenPadding : CGFloat = 16
+  
   var stackView: UIStackView!
   var actionHandler: ((ToolbarButton.Action) -> Void)?
 
@@ -52,8 +54,10 @@ class Toolbar : UIView {
 
   func setupStackView() {
     self.stackView = UIStackView(frame: self.bounds)
+    self.stackView.translatesAutoresizingMaskIntoConstraints = false
     self.stackView.axis = .horizontal
     self.stackView.alignment = .fill
+    self.stackView.spacing = screenPadding
     self.addSubview(self.stackView)
   }
 
@@ -82,8 +86,10 @@ class Toolbar : UIView {
 
   func setupLayout() {
     NSLayoutConstraint.activate([
-      self.stackView.leftAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leftAnchor),
-      self.stackView.rightAnchor.constraint(lessThanOrEqualTo: self.safeAreaLayoutGuide.rightAnchor),
+      self.stackView.leftAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leftAnchor,
+                                           constant: screenPadding),
+      self.stackView.rightAnchor.constraint(lessThanOrEqualTo: self.safeAreaLayoutGuide.rightAnchor,
+                                            constant: -screenPadding),
       self.stackView.topAnchor.constraint(equalTo: self.topAnchor),
       self.stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
     ])

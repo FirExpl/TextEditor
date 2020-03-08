@@ -108,7 +108,7 @@ internal extension String {
       if (prefix == self[range.lowerBound..<subprefixEndIndex]) {
         rightBound = subprefixEndIndex
       }
-     }
+    }
     
     return rightBound > startIndex ? String(self[startIndex..<rightBound]) : nil
   }
